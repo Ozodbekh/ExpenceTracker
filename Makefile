@@ -2,20 +2,20 @@ mig:
 	python3 manage.py makemigrations
 	python3 manage.py migrate
 
-
-freeze:
-	pip freeze > requirements.txt
-
-
 admin:
 	python3 manage.py createsuperuser
 
 
-make udb:
+udb:
 	rm -rf db.sqlite3
-	rm -rf authentication/migrations/*
-	touch authentication/migrations/__init__.py
-	rm -rf expense/migrations/*
-	touch expense/migrations/__init__.py
+	rm -rf user/migrations/*
+	rm -rf finance/migrations/*
+	touch user/migrations/__init__.py
+	touch finance/migrations/__init__.py
 	python3 manage.py makemigrations
 	python3 manage.py migrate
+
+celery:
+	celery -A root worker --loglevel=info
+
+

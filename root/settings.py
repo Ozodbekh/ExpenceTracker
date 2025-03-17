@@ -1,26 +1,29 @@
+from os.path import join
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-bs4pq$0si#exwucl66o8n2u8zq=sa^iv@zwy2paj05slguz88%'
-
+SECRET_KEY = 'django-insecure-^iltgu$5@kdj0(06_9k-@486i(i$0a@un#48f&h_5l%k5#wbkr'
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.auth',
-    'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # ==========
+    'user',
+    'finance',
+    'admin2',
+
+    # ==========
     'rest_framework',
-    'authentication',
     'drf_spectacular',
-    'rest_framework_simplejwt',
-    'expense',
-    'controller'
+    # 'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -35,12 +38,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'root.urls'
 
-AUTH_USER_MODEL = "authentication.User"
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': []
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -56,12 +57,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'root.wsgi.application'
 
+# Database
+# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# Password validation
+# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -78,6 +85,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Internationalization
+# https://docs.djangoproject.com/en/5.1/topics/i18n/
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -87,10 +97,20 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+STATIC_ROOT = join(BASE_DIR, 'static')
+MEDIA_URL = 'media/'
+MEDIA_ROOT = join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ======================================================================
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'bmurtozayev5@gmail.com'
+EMAIL_HOST_PASSWORD = 'xbqczqzyqbooypxm'
+
+AUTH_USER_MODEL = 'user.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
@@ -99,7 +119,7 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
 }
 
 SPECTACULAR_SETTINGS = {
@@ -107,6 +127,6 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'Your project description',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
-    # OTHER SETTINGS
-    'COMPONENT_SPLIT_REQUEST': True
 }
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
